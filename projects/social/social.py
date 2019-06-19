@@ -1,5 +1,4 @@
-
-
+import random
 class User:
     def __init__(self, name):
         self.name = name
@@ -41,14 +40,27 @@ class SocialGraph:
         The number of users must be greater than the average number of friendships.
         """
         # Reset graph
+        
+        # Instead of creating all possible combinations, I wanted to try generating a random 
+        # number of random user numbers.  While I do have 3 nested loops (n*avgNumFriends*randomNumber), n should stay
+        # relatively small.  If I created a list of all possible friends, I'd have an (n^2) operation
+        # and I believe my random number approach will scale better. 
         self.lastID = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
-
-        # Add users
-
-        # Create friendships
+        for i in range(1, numUsers+1):
+            self.users[i] = set()
+        n = avgFriendships*numUsers // 2
+        for user in range(1, numUsers+1):
+            numFriends = n if user == numUsers else random.randint(0,avgFriendships)
+            for f in range(numFriends):
+                if(n > 0):
+                    newFriend = random.randint(1, numUsers)
+                    while(newFriend in self.users[user] or newFriend == user):
+                        newFriend = random.randint(1, numUsers)
+                    self.users[user].add(newFriend)
+                    self.users[newFriend].add(user)
+                    n -=1
 
     def getAllSocialPaths(self, userID):
         """
