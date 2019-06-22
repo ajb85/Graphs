@@ -8,48 +8,102 @@ class Graph:
     def __init__(self):
         self.vertices = {}
     def add_vertex(self, vertex):
-        """
-        Add a vertex to the graph.
-        """
-        pass  # TODO
+        if not vertex in self.vertices:
+            self.vertices[vertex] = set()
+        else:
+            print(f"{vertex} vertex already exists")
     def add_edge(self, v1, v2):
-        """
-        Add a directed edge to the graph.
-        """
-        pass  # TODO
+        if v1 in self.vertices and v2 in self.vertices:
+            self.vertices[v1].add(v2)
+        else:
+            print(f"Either {v1}, {v2}, or both vertices do not exist")
+
     def bft(self, starting_vertex):
-        """
-        Print each vertex in breadth-first order
-        beginning from starting_vertex.
-        """
-        pass  # TODO
+        print("BFT")
+        visited = set()
+        q = Queue()
+        q.enqueue(starting_vertex)
+        while(q.size() > 0):
+            v = q.dequeue()
+            if(v not in visited):
+                visited.add(v)
+                print(v)
+                for neighbor in self.vertices[v]:
+                    q.enqueue(neighbor)
+                
     def dft(self, starting_vertex):
-        """
-        Print each vertex in depth-first order
-        beginning from starting_vertex.
-        """
-        pass  # TODO
+        print("DFT")
+        visited = set()
+        s = Stack()
+        s.push(starting_vertex)
+
+        while(s.size() > 0):
+            v = s.pop()
+            if(v not in visited):
+                visited.add(v)
+                print(v)
+                for neighbor in self.vertices[v]:
+                    s.push(neighbor)
+        
+
     def dft_recursive(self, starting_vertex):
-        """
-        Print each vertex in depth-first order
-        beginning from starting_vertex.
-        This should be done using recursion.
-        """
-        pass  # TODO
+        print("Recursive DFT")
+        visited = self._dftr_loop(starting_vertex)
+        for v in visited:
+            print(v)
+
+    def _dftr_loop(self, vertex, visited=set()):
+        if(vertex in visited):
+            return visited
+        visited.add(vertex)
+        for neighbor in self.vertices[vertex]:
+            self._dftr_loop(neighbor, visited)
+        return visited
+
     def bfs(self, starting_vertex, destination_vertex):
-        """
-        Return a list containing the shortest path from
-        starting_vertex to destination_vertex in
-        breath-first order.
-        """
-        pass  # TODO
+        print("BFS")
+        visited = set()
+        q = Queue()
+        q.enqueue([1])
+        paths = {}
+        while(q.size() > 0):
+            path = q.dequeue()
+            v = path[-1]
+            if(v == destination_vertex):
+                length = len(path)
+                if(length in paths):
+                    paths[length].append(path)
+                else:
+                    paths[length] = [path]
+            elif(not v in visited):
+                visited.add(v)
+                for neighbor in self.vertices[v]:
+                    q.enqueue([*path, neighbor])
+        smallest = min(paths.keys())
+        return None if len(paths[smallest]) == 0 else paths[smallest] if len(paths[smallest]) > 1 else paths[smallest][0]
+
+        
     def dfs(self, starting_vertex, destination_vertex):
-        """
-        Return a list containing a path from
-        starting_vertex to destination_vertex in
-        depth-first order.
-        """
-        pass  # TODO
+        print("BFS")
+        visited = set()
+        s = Stack()
+        s.push([1])
+        paths = {}
+        while(s.size() > 0):
+            path = s.pop()
+            v = path[-1]
+            if(v == destination_vertex):
+                length = len(path)
+                if(length in paths):
+                    paths[length].append(path)
+                else:
+                    paths[length] = [path]
+            elif(not v in visited):
+                visited.add(v)
+                for neighbor in self.vertices[v]:
+                    s.push([*path, neighbor])
+        smallest = min(paths.keys())
+        return None if len(paths[smallest]) == 0 else paths[smallest] if len(paths[smallest]) > 1 else paths[smallest][0]
 
 
 
